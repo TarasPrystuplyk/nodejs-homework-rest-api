@@ -1,7 +1,7 @@
-const { Contact } = require("../../models/contact");
+const { Contact } = require("../../models/contacts/contact");
 const { RequestError } = require("../../utils");
 
-const getContactById = async (req, res, next) => {
+const getContactById = async (req, res) => {
   const { contactId } = req.params;
   console.log(req.params);
   const result = await Contact.findById(contactId);

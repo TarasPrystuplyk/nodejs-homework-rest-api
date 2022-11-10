@@ -3,24 +3,32 @@ const router = express.Router();
 const ctrl = require("../../controllers/contacts");
 const ctrlWrapper = require("../../utils/ctrlWrapper");
 const { validateBody } = require("../../middlewares");
-const { schemas } = require("../../models/contact");
+const { schemas } = require("../../models/contacts/contact");
+const { authenticate } = require("../../middlewares");
 
-router.get("/", ctrlWrapper(ctrl.listContacts));
+router.get("/", authenticate, ctrlWrapper(ctrl.listContacts));
 
-router.get("/:contactId", ctrlWrapper(ctrl.getContactById));
+router.get("/:contactId", authenticate, ctrlWrapper(ctrl.getContactById));
 
-router.post("/", validateBody(schemas.addSchema), ctrlWrapper(ctrl.addContact));
+router.post(
+  "/",
+  authenticate,
+  validateBody(schemas.addSchema),
+  ctrlWrapper(ctrl.addContact)
+);
 
-router.delete("/:contactId", ctrlWrapper(ctrl.removeContact));
+router.delete("/:contactId", authenticate, ctrlWrapper(ctrl.removeContact));
 
 router.put(
   "/:contactId",
+  authenticate,
   validateBody(schemas.addSchema),
   ctrlWrapper(ctrl.updateContactById)
 );
 router.patch(
-  "/:contactId/favourite",
-  validateBody(schemas.addSchema),
+  "/:contactId/favorite",
+  authenticate,
+  validateBody(schemas.updateFavoriteSchema),
   ctrlWrapper(ctrl.updateStatusContact)
 );
 
